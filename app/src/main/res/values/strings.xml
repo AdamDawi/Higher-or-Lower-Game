@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Higher or Lower</string>
+    <string name="lower">LOWER</string>
+    <string name="or">OR</string>
+    <string name="higher">HIGHER</string>
+    <string name="start">START</string>
 </resources>
