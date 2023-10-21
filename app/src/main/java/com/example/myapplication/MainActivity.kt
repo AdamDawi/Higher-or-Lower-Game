@@ -3,7 +3,6 @@ package com.example.myapplication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import com.example.myapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity()
@@ -19,6 +18,7 @@ class MainActivity : AppCompatActivity()
         binding?.flStart?.setOnClickListener {
             startActivity(Intent(this, GameActivity::class.java))
         }
+
     }
 
     override fun onDestroy() {

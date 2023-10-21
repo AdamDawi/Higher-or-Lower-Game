@@ -38,7 +38,7 @@
             android:layout_gravity="center"
             android:background="@color/bgColor"
             android:padding="15dp"
-            android:text="OR"
+            android:text="@string/or"
             android:textColor="@color/white"
             android:textSize="50sp"
             android:textStyle="bold" />
