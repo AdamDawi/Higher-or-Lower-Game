@@ -11,11 +11,10 @@
         android:id="@+id/ivCircleImageUp"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        tools:src="@drawable/ff"
         app:layout_constraintBottom_toTopOf="@+id/flOR"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:src="@drawable/ff" />
 
     <TextView
         android:id="@+id/tvNameUp"
@@ -24,10 +23,37 @@
         android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tvPopulationNumberUp"
+        app:layout_constraintEnd_toEndOf="@+id/tvPopulationNumberUp"
+        app:layout_constraintStart_toStartOf="@+id/tvPopulationNumberUp"
+        tools:text="Name" />
+
+    <TextView
+        android:id="@+id/tvPopulationNumberUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/blue"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tvPopulationUp"
+        app:layout_constraintEnd_toEndOf="@+id/tvPopulationUp"
+        app:layout_constraintStart_toStartOf="@+id/tvPopulationUp"
+        tools:text="1,700,000" />
+
+    <TextView
+        android:id="@+id/tvPopulationUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/population"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/ivCircleImageUp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Name" />
+        android:visibility="invisible"
+        tools:visibility="visible"/>
+
 
     <FrameLayout
         android:id="@+id/flOR"
@@ -36,7 +62,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <View
             android:layout_width="match_parent"
@@ -60,11 +88,10 @@
         android:id="@+id/ivCircleImageDown"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        tools:src="@drawable/ff"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flOR" />
+        app:layout_constraintTop_toBottomOf="@+id/flOR"
+        tools:src="@drawable/ff" />
 
     <TextView
         android:id="@+id/tvNameDown"
@@ -73,10 +100,37 @@
         android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tvPopulationNumberDown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivCircleImageDown"
         tools:text="Name" />
+
+    <TextView
+        android:id="@+id/tvPopulationNumberDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/blue"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tvNameDown"
+        app:layout_constraintStart_toStartOf="@+id/tvNameDown"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameDown"
+        tools:text="1,700,000" />
+
+    <TextView
+        android:id="@+id/tvPopulationDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/population"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPopulationNumberDown"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
