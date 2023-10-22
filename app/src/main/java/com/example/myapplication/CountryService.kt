@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 interface CountryService
 {
-    @GET("v3.1/alpha/pl")
+    @GET("v3.1/all")
 
-    fun getCountry() : Call<List<ReceivedDataModel>>
+    fun getCountry() : Call<List<CountryModel>>
 }

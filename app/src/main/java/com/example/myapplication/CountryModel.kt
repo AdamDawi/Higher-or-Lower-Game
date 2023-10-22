@@ -1,8 +1,15 @@
 package com.example.myapplication
 
 data class CountryModel(
-    //val names: List<Names>,
-    val population: String
+    val name: CountryName,
+    val population: String,
+    val flags: Flag
 )
 
-//data class Names(val common:String)
+data class CountryName(
+    val common: String
+)
+
+data class Flag(
+    val png: String
+)
