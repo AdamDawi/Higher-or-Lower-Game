@@ -1,16 +1,18 @@
 package com.example.myapplication
 
 import android.app.Dialog
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.myapplication.databinding.ActivityGameBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +25,9 @@ class GameActivity : AppCompatActivity()
     private var binding: ActivityGameBinding? = null
     private var countryList: List<CountryModel>? = null
     private var customProgressDialog: Dialog? = null
+    private var usedCountriesIds: HashSet<Int>? = null
+    private var countryUp: CountryModel? = null
+    private var countryDown: CountryModel? = null
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -32,17 +37,77 @@ class GameActivity : AppCompatActivity()
         showProgressDialog()
 
         getCountriesDataDetails()
+
+        binding?.ivCircleImageUp?.setOnClickListener {
+            if(Integer.parseInt(countryUp!!.population)>=Integer.parseInt(countryDown!!.population))
+            {
+                binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this, R.color.darkGreen))
+                binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this, R.color.darkRed))
+            }
+            else
+            {
+                binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this, R.color.darkRed))
+                binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this, R.color.darkGreen))
+            }
+            changeGraphicsElementsVisibility()
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(1000)
+                if(Integer.parseInt(countryUp!!.population)>=Integer.parseInt(countryDown!!.population))
+                {
+                    binding?.tvPopulationNumberDown?.visibility = View.GONE
+                    binding?.tvPopulationDown?.visibility = View.GONE
+                    setCountryData(countryList!![getRandomCountryId()], 1)
+                }
+                else
+                {
+                    //TODO make end dialog
+                    finish()
+                }
+                binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.white))
+                binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.white))
+            }
+
+        }
+
+        binding?.ivCircleImageDown?.setOnClickListener {
+            if(Integer.parseInt(countryUp!!.population)<=Integer.parseInt(countryDown!!.population))
+            {
+                binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this, R.color.darkGreen))
+                binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this, R.color.darkRed))
+            }
+            else
+            {
+                binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this, R.color.darkRed))
+                binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this, R.color.darkGreen))
+            }
+            changeGraphicsElementsVisibility()
+
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(1000)
+                if(Integer.parseInt(countryUp!!.population)<=Integer.parseInt(countryDown!!.population))
+                {
+                    binding?.tvPopulationNumberUp?.visibility = View.GONE
+                    binding?.tvPopulationUp?.visibility = View.GONE
+                    setCountryData(countryList!![getRandomCountryId()], 0)
+                }
+                else
+                {
+                    //TODO make end dialog
+                    finish()
+                }
+                binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.white))
+                binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.white))
+            }
+
+        }
     }
     private fun getCountriesDataDetails()
     {
-        if(Constants.isNetworkAvailable(this))
+        if(!Constants.isNetworkAvailable(this))
         {
-            Toast.makeText(this@GameActivity, "You have internet connection", Toast.LENGTH_SHORT).show()
-        }else
-        {
-            Toast.makeText(this@GameActivity, "You not have internet connection", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@GameActivity, "Please turn on internet connection", Toast.LENGTH_LONG).show()
         }
-        //making retrofit connection
+        //making retrofit for fast connection
         val retrofit: Retrofit = Retrofit.Builder().baseUrl(Constants.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build()
         val service:CountryService = retrofit.create(CountryService::class.java)
         val listCall: Call<List<CountryModel>> = service.getCountry()
@@ -55,13 +120,13 @@ class GameActivity : AppCompatActivity()
                 if(response.isSuccessful)
                 {
                     cancelProgressDialog()
-                    changeGraphicsElementsVisibility()
+                    //changing the visibility of element to visible because they are invisible at the start
+                    binding?.flOR?.visibility = View.VISIBLE
+                    //obtained data
                     countryList = response.body()
-                    Log.i("Response RESULT: ", "$countryList")
-                    Log.i("Response SIZE: ", countryList?.size.toString())
 
-                    setCountryData(countryList?.get(getRandomNumber(countryList?.size))!!, 0)
-                    setCountryData(countryList!![getRandomNumber(countryList?.size)], 1)
+                    setCountryData(countryList!![getRandomCountryId()], 0)
+                    setCountryData(countryList!![getRandomCountryId()], 1)
                 }
                 else
                 {
@@ -81,24 +146,25 @@ class GameActivity : AppCompatActivity()
 
     private fun setCountryData(country: CountryModel, countryDataType: Int)
     {
-        //0 is upper country
-        //1 is bottom country
+        /*
+        0 is upper country on layout
+        1 is bottom country on layout
+        */
         if(countryDataType==0)
         {
+            countryUp = country
             //Glide for load images from link to xml element
             Glide.with(this@GameActivity).load(country.flags.png).into(binding!!.ivCircleImageUp)
             binding?.tvNameUp?.text = country.name.common
             binding?.tvPopulationNumberUp?.text = addCommasToPopulationData(country.population)
         }else if(countryDataType==1)
         {
+            countryDown = country
             //Glide for load images from link to xml element
             Glide.with(this@GameActivity).load(country.flags.png).into(binding!!.ivCircleImageDown)
             binding?.tvNameDown?.text = country.name.common
-            Log.e("Test", country.population)
             binding?.tvPopulationNumberDown?.text = addCommasToPopulationData(country.population)
         }
-
-        //.override(300, 300).apply(RequestOptions().transform(CircleCrop()))
     }
 
     private fun addCommasToPopulationData(population: String): String
@@ -121,7 +187,7 @@ class GameActivity : AppCompatActivity()
     {
         customProgressDialog = Dialog(this@GameActivity)
         customProgressDialog?.setContentView(R.layout.custom_progress_dialog)
-        customProgressDialog?.setCancelable(true)
+        customProgressDialog?.setCancelable(false)
         customProgressDialog?.show()
     }
 
@@ -132,18 +198,27 @@ class GameActivity : AppCompatActivity()
 
     private fun changeGraphicsElementsVisibility()
     {
-        //changing the visibility of elements because they are invisible at the start
-        binding?.tvPopulationUp?.visibility = View.VISIBLE
         binding?.tvPopulationDown?.visibility = View.VISIBLE
-        binding?.flOR?.visibility = View.VISIBLE
+        binding?.tvPopulationNumberDown?.visibility = View.VISIBLE
+        binding?.tvPopulationUp?.visibility = View.VISIBLE
+        binding?.tvPopulationNumberUp?.visibility = View.VISIBLE
+
     }
 
-    private fun getRandomNumber(borderNumber: Int?): Int
+    private fun getRandomCountryId(): Int
     {
+
         // Create class object
         val random = Random(System.currentTimeMillis())
         // Generate random number from 0 to borderNumber
-        return random.nextInt(0, borderNumber!!)
+        var randomNumber = random.nextInt(0, countryList?.size!!)
+
+        //checks whether the id has not already appeared before
+        while(usedCountriesIds?.contains(randomNumber) == true)
+        {
+            randomNumber = random.nextInt(0, countryList?.size!!)
+        }
+        return randomNumber
     }
 
     override fun onDestroy()
