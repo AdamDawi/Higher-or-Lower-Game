@@ -103,7 +103,6 @@
             android:textColor="@color/white"
             android:textSize="40sp"
             android:textStyle="bold" />
-
     </FrameLayout>
 
 

@@ -6,4 +6,6 @@
     <string name="start">START</string>
     <string name="population">population</string>
     <string name="please_wait">Please wait...</string>
+    <string name="score">Score:</string>
+    <string name="_0">0</string>
 </resources>

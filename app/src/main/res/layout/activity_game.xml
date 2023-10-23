@@ -5,10 +5,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GameActivity"
-    android:background="@color/bgColor">
+    android:background="@color/bgColor"
+    android:paddingTop="10dp"
+    android:paddingBottom="15dp">
+
+    <TextView
+        android:id="@+id/tvScoreNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/bgColor"
+        tools:text="100"
+        android:text="@string/_0"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/orange"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/bgColor"
+        android:text="@string/score"
+        android:textColor="@color/orange"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/tvScoreNumber"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/ivCircleImageUp"
+        android:id="@+id/ivImageUp"
         android:layout_width="200dp"
         android:layout_height="150dp"
         app:layout_constraintBottom_toTopOf="@+id/flOR"
@@ -26,7 +60,8 @@
         app:layout_constraintBottom_toTopOf="@id/tvPopulationNumberUp"
         app:layout_constraintEnd_toEndOf="@+id/tvPopulationNumberUp"
         app:layout_constraintStart_toStartOf="@+id/tvPopulationNumberUp"
-        tools:text="Name" />
+        tools:text="Name"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/tvPopulationNumberUp"
@@ -50,7 +85,7 @@
         android:textColor="@color/white"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/ivCircleImageUp"
+        app:layout_constraintBottom_toTopOf="@+id/ivImageUp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"
@@ -84,10 +119,11 @@
             android:textColor="@color/white"
             android:textSize="50sp"
             android:textStyle="bold" />
+
     </FrameLayout>
 
     <ImageView
-        android:id="@+id/ivCircleImageDown"
+        android:id="@+id/ivImageDown"
         android:layout_width="200dp"
         android:layout_height="150dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,8 +141,9 @@
         app:layout_constraintBottom_toTopOf="@id/tvPopulationNumberDown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivCircleImageDown"
-        tools:text="Name" />
+        app:layout_constraintTop_toBottomOf="@+id/ivImageDown"
+        tools:text="Name"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/tvPopulationNumberDown"

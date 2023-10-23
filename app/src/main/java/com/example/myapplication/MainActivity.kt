@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,7 +19,6 @@ class MainActivity : AppCompatActivity()
         binding?.flStart?.setOnClickListener {
             startActivity(Intent(this, GameActivity::class.java))
         }
-
     }
 
     override fun onDestroy() {

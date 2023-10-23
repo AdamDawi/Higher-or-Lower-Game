@@ -8,6 +8,13 @@ import android.os.Build
 object Constants{
 
     const val BASE_URL:String = "https://restcountries.com/"
+    /*
+    0 is upper country on layout
+    1 is bottom country on layout
+    */
+    const val UP_COUNTRY:Int = 0
+    const val DOWN_COUNTRY:Int = 1
+
     fun isNetworkAvailable(context: Context): Boolean{
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
