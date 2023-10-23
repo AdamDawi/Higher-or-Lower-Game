@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 

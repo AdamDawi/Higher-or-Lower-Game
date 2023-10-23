@@ -178,6 +178,12 @@ class GameActivity : AppCompatActivity()
 
     private fun checkCountriesPopulation(countryType: Int)
     {
+        //blocking clicks on Images
+        binding?.ivImageUp?.isClickable = false
+        binding?.ivImageDown?.isClickable = false
+        binding?.ivImageUp?.isFocusable = false
+        binding?.ivImageDown?.isFocusable = false
+
         changeGraphicsElementsVisibility()
         //checking which country is about to changed population number
         if(countryThatWon==-1)
@@ -244,16 +250,18 @@ class GameActivity : AppCompatActivity()
                 view?.slideFromOut(1000)
             }
 
-
-
-
-
             binding?.tvPopulationNumberDown?.visibility = View.GONE
             binding?.tvPopulationDown?.visibility = View.GONE
             setCountryData(countryList!![getRandomCountryId()], Constants.DOWN_COUNTRY)
             binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.blue))
             binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.blue))
+
+            binding?.ivImageUp?.isClickable = true
+            binding?.ivImageDown?.isClickable = true
+            binding?.ivImageUp?.isFocusable = true
+            binding?.ivImageDown?.isFocusable = true
         }
+
     }
 
     private fun animateNumberTextView(finalValue: Int, textview: TextView): ValueAnimator{
