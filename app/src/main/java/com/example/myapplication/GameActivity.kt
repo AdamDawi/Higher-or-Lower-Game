@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.animation.ValueAnimator
 import android.app.Dialog
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -31,6 +32,7 @@ class GameActivity : AppCompatActivity()
     //storing countries from rest api
     private var countryList: List<CountryModel>? = null
     private var customProgressDialog: Dialog? = null
+    //stores countries that have already been used
     private lateinit var usedCountriesIds: HashSet<Int>
     //storing the countries that are currently displayed
     private var countryUp: CountryModel? = null
@@ -41,7 +43,7 @@ class GameActivity : AppCompatActivity()
     private lateinit var animatorDown: ValueAnimator
     //countryThatWon = -1 because we want to start animations for countryUp and countryDown at the start of the activity
     private var countryThatWon: Int = -1
-    private val animationDelay: Long = 2000
+    private val animationDelay: Long = 1000
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -62,15 +64,17 @@ class GameActivity : AppCompatActivity()
     }
     private fun getCountriesDataDetails()
     {
+        //checking internet connection
         if(!Constants.isNetworkAvailable(this))
         {
-            Toast.makeText(this@GameActivity, "Please turn on internet connection", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@GameActivity, "Please turn on internet connection and open app again.", Toast.LENGTH_LONG).show()
         }
-        //making retrofit for fast connection
+        //making retrofit for fast connection with HTTP
         val retrofit: Retrofit = Retrofit.Builder().baseUrl(Constants.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build()
         val service:CountryService = retrofit.create(CountryService::class.java)
         val listCall: Call<List<CountryModel>> = service.getCountry()
 
+        //invoking a request asynchronously
         listCall.enqueue(object: Callback<List<CountryModel>>{
             override fun onResponse(
                 call: Call<List<CountryModel>>,
@@ -88,8 +92,10 @@ class GameActivity : AppCompatActivity()
                         binding?.tvScoreNumber?.visibility = View.VISIBLE
                         binding?.tvScore?.visibility = View.VISIBLE
 
+                        //setting the first country data from the API
                         setCountryData(countryList!![getRandomCountryId()], Constants.UP_COUNTRY)
                         setCountryData(countryList!![getRandomCountryId()], Constants.DOWN_COUNTRY)
+
                         cancelProgressDialog()
                     }
                 }
@@ -118,6 +124,7 @@ class GameActivity : AppCompatActivity()
             //Glide for load images from link to xml element
             Glide.with(this@GameActivity).load(country.flags.png).into(binding!!.ivImageUp)
             binding?.tvNameUp?.text = country.name.common
+            //preparing animate for population number
             animatorUp = animateNumberTextView(Integer.parseInt(country.population), binding?.tvPopulationNumberUp!!)
         }else if(countryType==Constants.DOWN_COUNTRY)
         {
@@ -125,6 +132,7 @@ class GameActivity : AppCompatActivity()
             //Glide for load images from link to xml element
             Glide.with(this@GameActivity).load(country.flags.png).into(binding!!.ivImageDown)
             binding?.tvNameDown?.text = country.name.common
+            //preparing animate for population number
             animatorDown = animateNumberTextView(Integer.parseInt(country.population), binding?.tvPopulationNumberDown!!)
         }
     }
@@ -156,7 +164,7 @@ class GameActivity : AppCompatActivity()
     {
         // Create class object
         val random = Random(System.currentTimeMillis())
-        // Generate random number from 0 to borderNumber
+        // Generate random number from 0 to borderNumber which is number of countries
         var randomNumber = random.nextInt(0, countryList?.size ?:0)
 
         //checks whether the id has not already appeared before
@@ -212,7 +220,7 @@ class GameActivity : AppCompatActivity()
                 binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.darkGreen))
             }
             //after marking the results and animating tv population
-            delay(1000)
+            delay(animationDelay)
 
             if(countryType==Constants.UP_COUNTRY && countryUpPopulation>=countryDownPopulation)
             {
@@ -237,22 +245,40 @@ class GameActivity : AppCompatActivity()
                 return@launch
             }
 
-            nextTurnAnim()
+            //nextTurnAnim() TODO maybe
 
-            delay(1000)
+
+            //setting next country
+            //first new country is added to duplicated country elements
+            var countryId = getRandomCountryId()
+            //Glide for load images from link to xml element
+            Glide.with(this@GameActivity).load(countryList?.get(countryId)?.flags?.png).into(binding!!.ivImageDuplicate)
+            binding?.tvNameDuplicate?.text = countryList?.get(countryId)?.name?.common
+
+            binding?.tvNameDuplicate?.visibility = View.VISIBLE
+            binding?.ivImageDuplicate?.visibility = View.VISIBLE
+
+            binding?.flOR?.alpha=0.3f
+            SlideAnim.onStartAnimation(binding?.llUp!!, binding?.llDown!!, binding?.llDuplicate!!)
+
+            delay(800)
             setCountryData(countryDown!!, Constants.UP_COUNTRY)
             animatorUp.duration = 0L
             animatorUp.start()
 
-            val views = listOf(binding?.tvPopulationNumberDown, binding?.ivImageDown,  binding?.tvPopulationDown, binding?.tvNameDown)
-            for(view in views)
-            {
-                view?.slideFromOut(1000)
-            }
+            setCountryData(countryList!![countryId], Constants.DOWN_COUNTRY)
+
+            SlideAnim.reset(binding?.llUp!!, binding?.llDown!!, binding?.llDuplicate!!)
+
+            binding?.flOR?.alpha=1f
 
             binding?.tvPopulationNumberDown?.visibility = View.GONE
             binding?.tvPopulationDown?.visibility = View.GONE
-            setCountryData(countryList!![getRandomCountryId()], Constants.DOWN_COUNTRY)
+
+
+            binding?.tvNameDuplicate?.visibility = View.INVISIBLE
+            binding?.ivImageDuplicate?.visibility = View.INVISIBLE
+
             binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.blue))
             binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.blue))
 
@@ -284,17 +310,6 @@ class GameActivity : AppCompatActivity()
         return valueAnimator
     }
 
-    private fun nextTurnAnim()
-    {
-        val views = listOf(binding?.tvPopulationNumberDown, binding?.ivImageDown,  binding?.tvPopulationDown, binding?.tvNameDown)
-        val targetViews = listOf(binding?.tvPopulationNumberUp,binding?.ivImageUp,binding?.tvPopulationUp, binding?.tvNameUp)
-        animateAllViews(views,targetViews, 1000)
-
-        for(view in targetViews)
-        {
-            view?.slideTo(view.x, -2000f, 1000)
-        }
-    }
     override fun onDestroy()
     {
         super.onDestroy()
