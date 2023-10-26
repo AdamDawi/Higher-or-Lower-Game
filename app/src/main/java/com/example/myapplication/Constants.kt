@@ -14,6 +14,8 @@ object Constants{
     */
     const val UP_COUNTRY:Int = 0
     const val DOWN_COUNTRY:Int = 1
+    const val PREFERENCE_NAME = "WeatherAppPreference"
+    const val WEATHER_RESPONSE_DATA = "weather_response_data"
 
     fun isNetworkAvailable(context: Context): Boolean{
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

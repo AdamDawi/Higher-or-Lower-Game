@@ -2,6 +2,8 @@ package com.example.myapplication
 
 import android.animation.ValueAnimator
 import android.app.Dialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -12,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.myapplication.databinding.ActivityGameBinding
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -44,6 +48,10 @@ class GameActivity : AppCompatActivity()
     //countryThatWon = -1 because we want to start animations for countryUp and countryDown at the start of the activity
     private var countryThatWon: Int = -1
     private val animationDelay: Long = 1000
+    //storing data on the phone
+    private lateinit var mSharedPreferences: SharedPreferences
+    //if we need load data is set to 0 if not is !=0
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -52,7 +60,22 @@ class GameActivity : AppCompatActivity()
 
         showProgressDialog()
         usedCountriesIds = HashSet()
-        getCountriesDataDetails()
+
+        //shared preferences only visible to this app
+        mSharedPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE)
+        //if 0 you need load data from api if not you don't need load
+        val loadData = intent.getIntExtra("loadData", 0)
+
+        //we don't need load data from api again because we have it in files
+        if(loadData!=0 && Constants.isNetworkAvailable(this))
+        {
+            setupUI()
+        }
+        //we need to load data from api
+        if(countryList.isNullOrEmpty())
+        {
+            getCountriesDataDetails()
+        }
 
         binding?.ivImageUp?.setOnClickListener {
             checkCountriesPopulation(Constants.UP_COUNTRY)
@@ -67,7 +90,7 @@ class GameActivity : AppCompatActivity()
         //checking internet connection
         if(!Constants.isNetworkAvailable(this))
         {
-            Toast.makeText(this@GameActivity, "Please turn on internet connection and open app again.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@GameActivity, "You don't have internet connection.", Toast.LENGTH_SHORT).show()
         }
         //making retrofit for fast connection with HTTP
         val retrofit: Retrofit = Retrofit.Builder().baseUrl(Constants.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build()
@@ -84,6 +107,13 @@ class GameActivity : AppCompatActivity()
                 {
                     //obtained data
                     countryList = response.body()
+
+                    //converting json to string because we want to store it in shared preferences
+                    val countryListResponseJsonString = Gson().toJson(countryList)
+                    //start editing
+                    val editor = mSharedPreferences.edit()
+                    editor.putString(Constants.WEATHER_RESPONSE_DATA, countryListResponseJsonString)
+                    editor.apply()
 
                     //changing graphics elements must be in main Thread
                     runOnUiThread {
@@ -113,6 +143,35 @@ class GameActivity : AppCompatActivity()
                 Log.e("ERROR", t.message.toString())
             }
         })
+    }
+    private fun setupUI()
+    {
+        //getting data from phone
+        val countryListResponseJsonString = mSharedPreferences.getString(Constants.WEATHER_RESPONSE_DATA, "")
+
+        if(!countryListResponseJsonString.isNullOrEmpty() && countryList.isNullOrEmpty())
+        {
+            //get countries data from phone
+            countryList = Gson().fromJson<List<CountryModel>>(
+                countryListResponseJsonString,
+                object : TypeToken<List<CountryModel>>() {}.type
+            )
+
+            //changing graphics elements must be in main Thread
+            runOnUiThread {
+                //changing the visibility of elements to visible because they are invisible at the start
+                binding?.flOR?.visibility = View.VISIBLE
+                binding?.tvScoreNumber?.visibility = View.VISIBLE
+                binding?.tvScore?.visibility = View.VISIBLE
+
+                //setting the first country data from the API
+                setCountryData(countryList!![getRandomCountryId()], Constants.UP_COUNTRY)
+                setCountryData(countryList!![getRandomCountryId()], Constants.DOWN_COUNTRY)
+
+                cancelProgressDialog()
+            }
+        }
+
     }
 
     private fun setCountryData(country: CountryModel, countryType: Int)
@@ -157,7 +216,6 @@ class GameActivity : AppCompatActivity()
         binding?.tvPopulationNumberDown?.visibility = View.VISIBLE
         binding?.tvPopulationUp?.visibility = View.VISIBLE
         binding?.tvPopulationNumberUp?.visibility = View.VISIBLE
-
     }
 
     private fun getRandomCountryId(): Int
@@ -245,12 +303,9 @@ class GameActivity : AppCompatActivity()
                 return@launch
             }
 
-            //nextTurnAnim() TODO maybe
-
-
             //setting next country
             //first new country is added to duplicated country elements
-            var countryId = getRandomCountryId()
+            val countryId = getRandomCountryId()
             //Glide for load images from link to xml element
             Glide.with(this@GameActivity).load(countryList?.get(countryId)?.flags?.png).into(binding!!.ivImageDuplicate)
             binding?.tvNameDuplicate?.text = countryList?.get(countryId)?.name?.common

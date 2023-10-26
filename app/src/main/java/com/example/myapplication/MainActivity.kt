@@ -13,11 +13,15 @@ class MainActivity : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-
         setContentView(binding?.root)
 
+        var intValue = -1 // int for checking is that you nee load data again
+
         binding?.flStart?.setOnClickListener {
-            startActivity(Intent(this, GameActivity::class.java))
+            intValue++;
+            val intent = Intent(this, GameActivity::class.java)
+            intent.putExtra("loadData", intValue)
+            startActivity(intent)
         }
     }
 
