@@ -14,8 +14,12 @@ object Constants{
     */
     const val UP_COUNTRY:Int = 0
     const val DOWN_COUNTRY:Int = 1
-    const val PREFERENCE_NAME = "WeatherAppPreference"
-    const val WEATHER_RESPONSE_DATA = "weather_response_data"
+    const val PREFERENCE_NAME = "CountryAppPreference"
+    const val COUNTRY_RESPONSE_DATA = "country_response_data"
+    //this is delay for changing countries in next turn while player choose before
+    const val NEXT_TURN_ANIM_DELAY = 800L
+    //this is delay for number animation
+    const val NUMBER_ANIM_DELAY = 1000L
 
     fun isNetworkAvailable(context: Context): Boolean{
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

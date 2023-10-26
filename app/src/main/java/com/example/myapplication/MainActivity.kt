@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,12 +14,13 @@ class MainActivity : AppCompatActivity()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
-        var intValue = -1 // int for checking is that you nee load data again
+        var isDataLoaded = -1 //a variable to check if we need to load country data from the API
 
         binding?.flStart?.setOnClickListener {
-            intValue++;
+            isDataLoaded++;
             val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("loadData", intValue)
+            //send variable to game activity
+            intent.putExtra("loadData", isDataLoaded)
             startActivity(intent)
         }
     }

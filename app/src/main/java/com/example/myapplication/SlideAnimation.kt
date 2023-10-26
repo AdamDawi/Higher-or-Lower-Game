@@ -1,14 +1,11 @@
 package com.example.myapplication
 
-import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
-import android.util.Log
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 
-object SlideAnim
+object SlideAnimation
 {
     fun onStartAnimation(llUp: LinearLayout, llDown: LinearLayout, llDuplicate: LinearLayout)
     {
@@ -35,7 +32,7 @@ object SlideAnim
         animatorSet.play(countryDownAnimator).with(countryDuplicateAnimator)
 
         animatorSet.interpolator = LinearInterpolator()
-        animatorSet.duration = 800
+        animatorSet.duration = Constants.NEXT_TURN_ANIM_DELAY
         animatorSet.start()
     }
 

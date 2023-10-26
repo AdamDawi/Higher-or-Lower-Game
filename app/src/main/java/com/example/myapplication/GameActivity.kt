@@ -3,9 +3,9 @@ package com.example.myapplication
 import android.animation.ValueAnimator
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.myapplication.databinding.ActivityGameBinding
+import com.example.myapplication.databinding.CustomEndGameDialogBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -35,22 +36,25 @@ class GameActivity : AppCompatActivity()
     private var binding: ActivityGameBinding? = null
     //storing countries from rest api
     private var countryList: List<CountryModel>? = null
+    //custom dialogs
     private var customProgressDialog: Dialog? = null
+    private var customEndDialog: Dialog? = null
     //stores countries that have already been used
     private lateinit var usedCountriesIds: HashSet<Int>
-    //storing the countries that are currently displayed
+    //stores the currently displayed countries
     private var countryUp: CountryModel? = null
     private var countryDown: CountryModel? = null
+    //player's score
     private var score: Int = 0
-    //storing animations that can be launched later
+    //storing animations that can be launched later during the turn
     private lateinit var animatorUp: ValueAnimator
     private lateinit var animatorDown: ValueAnimator
-    //countryThatWon = -1 because we want to start animations for countryUp and countryDown at the start of the activity
-    private var countryThatWon: Int = -1
-    private val animationDelay: Long = 1000
+    //we want to start animations for countryUp and countryDown at the start of the activity
+    private var isBothCountriesAnim = true
     //storing data on the phone
     private lateinit var mSharedPreferences: SharedPreferences
-    //if we need load data is set to 0 if not is !=0
+    //if we need country data from the API, we set it to 0, if not, we don't need it
+    private var isDataLoaded: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -58,16 +62,19 @@ class GameActivity : AppCompatActivity()
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        //loading dialog
         showProgressDialog()
+
         usedCountriesIds = HashSet()
 
-        //shared preferences only visible to this app
+        //getting shared preferences only visible to this app
         mSharedPreferences = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE)
-        //if 0 you need load data from api if not you don't need load
-        val loadData = intent.getIntExtra("loadData", 0)
 
-        //we don't need load data from api again because we have it in files
-        if(loadData!=0 && Constants.isNetworkAvailable(this))
+        //getting value from main activity
+        isDataLoaded = intent.getIntExtra("loadData", 0)
+
+        //we don't need load data from api again because we have it in file
+        if(isDataLoaded!=0 && Constants.isNetworkAvailable(this))
         {
             setupUI()
         }
@@ -112,7 +119,7 @@ class GameActivity : AppCompatActivity()
                     val countryListResponseJsonString = Gson().toJson(countryList)
                     //start editing
                     val editor = mSharedPreferences.edit()
-                    editor.putString(Constants.WEATHER_RESPONSE_DATA, countryListResponseJsonString)
+                    editor.putString(Constants.COUNTRY_RESPONSE_DATA, countryListResponseJsonString)
                     editor.apply()
 
                     //changing graphics elements must be in main Thread
@@ -122,7 +129,7 @@ class GameActivity : AppCompatActivity()
                         binding?.tvScoreNumber?.visibility = View.VISIBLE
                         binding?.tvScore?.visibility = View.VISIBLE
 
-                        //setting the first country data from the API
+                        //setting the first countries data from the API
                         setCountryData(countryList!![getRandomCountryId()], Constants.UP_COUNTRY)
                         setCountryData(countryList!![getRandomCountryId()], Constants.DOWN_COUNTRY)
 
@@ -146,8 +153,8 @@ class GameActivity : AppCompatActivity()
     }
     private fun setupUI()
     {
-        //getting data from phone
-        val countryListResponseJsonString = mSharedPreferences.getString(Constants.WEATHER_RESPONSE_DATA, "")
+        //getting data from phone's file
+        val countryListResponseJsonString = mSharedPreferences.getString(Constants.COUNTRY_RESPONSE_DATA, "")
 
         if(!countryListResponseJsonString.isNullOrEmpty() && countryList.isNullOrEmpty())
         {
@@ -157,26 +164,21 @@ class GameActivity : AppCompatActivity()
                 object : TypeToken<List<CountryModel>>() {}.type
             )
 
-            //changing graphics elements must be in main Thread
-            runOnUiThread {
-                //changing the visibility of elements to visible because they are invisible at the start
-                binding?.flOR?.visibility = View.VISIBLE
-                binding?.tvScoreNumber?.visibility = View.VISIBLE
-                binding?.tvScore?.visibility = View.VISIBLE
+            //changing the visibility of elements to visible because they are invisible at the start
+            binding?.flOR?.visibility = View.VISIBLE
+            binding?.tvScoreNumber?.visibility = View.VISIBLE
+            binding?.tvScore?.visibility = View.VISIBLE
 
-                //setting the first country data from the API
-                setCountryData(countryList!![getRandomCountryId()], Constants.UP_COUNTRY)
-                setCountryData(countryList!![getRandomCountryId()], Constants.DOWN_COUNTRY)
+            //setting the first country data from the API
+            setCountryData(countryList!![getRandomCountryId()], Constants.UP_COUNTRY)
+            setCountryData(countryList!![getRandomCountryId()], Constants.DOWN_COUNTRY)
 
-                cancelProgressDialog()
-            }
+            cancelProgressDialog()
         }
-
     }
 
     private fun setCountryData(country: CountryModel, countryType: Int)
     {
-
         if(countryType==Constants.UP_COUNTRY)
         {
             countryUp = country
@@ -202,6 +204,29 @@ class GameActivity : AppCompatActivity()
         customProgressDialog?.setContentView(R.layout.custom_progress_dialog)
         customProgressDialog?.setCancelable(false)
         customProgressDialog?.show()
+    }
+
+    private fun showEndDialog()
+    {
+        customEndDialog = Dialog(this@GameActivity)
+        val dialogBinding = CustomEndGameDialogBinding.inflate(layoutInflater)
+        customEndDialog?.setContentView(dialogBinding.root)
+
+        dialogBinding.btnYes.setOnClickListener {
+            //start game activity again
+            isDataLoaded++
+            val intent = Intent(this, GameActivity::class.java)
+            intent.putExtra("loadData", isDataLoaded)
+            startActivity(intent)
+            finish()
+        }
+
+        dialogBinding.btnNo.setOnClickListener {
+            customEndDialog?.dismiss()
+            finish()
+        }
+        customEndDialog?.setCancelable(false)
+        customEndDialog?.show()
     }
 
     private fun cancelProgressDialog()
@@ -233,9 +258,8 @@ class GameActivity : AppCompatActivity()
 
         if(usedCountriesIds.size==countryList?.size)
         {
-            //TODO end dialog
+            showEndDialog()
             Toast.makeText(this@GameActivity, "You ended game. No more countries to display.", Toast.LENGTH_LONG).show()
-            finish()
         }
         //add id to used ids
         usedCountriesIds.add(randomNumber)
@@ -244,7 +268,7 @@ class GameActivity : AppCompatActivity()
 
     private fun checkCountriesPopulation(countryType: Int)
     {
-        //blocking clicks on Images
+        //blocking clicks on images
         binding?.ivImageUp?.isClickable = false
         binding?.ivImageDown?.isClickable = false
         binding?.ivImageUp?.isFocusable = false
@@ -252,7 +276,7 @@ class GameActivity : AppCompatActivity()
 
         changeGraphicsElementsVisibility()
         //checking which country is about to changed population number
-        if(countryThatWon==-1)
+        if(isBothCountriesAnim)
         {
             animatorDown.start()
             animatorUp.start()
@@ -263,10 +287,12 @@ class GameActivity : AppCompatActivity()
         }
 
         CoroutineScope(Dispatchers.Main).launch {
+            //setting the population number
             val countryUpPopulation = Integer.parseInt(countryUp!!.population)
             val countryDownPopulation = Integer.parseInt(countryDown!!.population)
-            delay(animationDelay)
 
+            delay(Constants.NUMBER_ANIM_DELAY)
+            //mark lower and higher population
             if(countryUpPopulation>=countryDownPopulation)
             {
                 binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.darkGreen))
@@ -277,78 +303,89 @@ class GameActivity : AppCompatActivity()
                 binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.darkRed))
                 binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.darkGreen))
             }
-            //after marking the results and animating tv population
-            delay(animationDelay)
+            //after marking the results and animating population text view
+            delay(Constants.NUMBER_ANIM_DELAY)
+            var isDialogVisible = false
 
-            if(countryType==Constants.UP_COUNTRY && countryUpPopulation>=countryDownPopulation)
+            //check if lose
+            if((countryType==Constants.UP_COUNTRY && countryUpPopulation>=countryDownPopulation)
+                || (countryType==Constants.DOWN_COUNTRY && countryUpPopulation<=countryDownPopulation))
             {
                 score++
-                countryThatWon=Constants.UP_COUNTRY
-                binding?.tvScoreNumber?.text = score.toString()
-
-            }
-            else if(countryType==Constants.DOWN_COUNTRY && countryUpPopulation<=countryDownPopulation)
-            {
-                score++
-                countryThatWon=Constants.DOWN_COUNTRY
+                isBothCountriesAnim=false
                 binding?.tvScoreNumber?.text = score.toString()
             }
             else
             {
-                //TODO make end dialog
-                Toast.makeText(this@GameActivity, "You lose", Toast.LENGTH_SHORT).show()
-
-                //End activity with return
-                finish()
-                return@launch
+                showEndDialog()
+                isDialogVisible=true
             }
-
-            //setting next country
-            //first new country is added to duplicated country elements
-            val countryId = getRandomCountryId()
-            //Glide for load images from link to xml element
-            Glide.with(this@GameActivity).load(countryList?.get(countryId)?.flags?.png).into(binding!!.ivImageDuplicate)
-            binding?.tvNameDuplicate?.text = countryList?.get(countryId)?.name?.common
-
-            binding?.tvNameDuplicate?.visibility = View.VISIBLE
-            binding?.ivImageDuplicate?.visibility = View.VISIBLE
-
-            binding?.flOR?.alpha=0.3f
-            SlideAnim.onStartAnimation(binding?.llUp!!, binding?.llDown!!, binding?.llDuplicate!!)
-
-            delay(800)
-            setCountryData(countryDown!!, Constants.UP_COUNTRY)
-            animatorUp.duration = 0L
-            animatorUp.start()
-
-            setCountryData(countryList!![countryId], Constants.DOWN_COUNTRY)
-
-            SlideAnim.reset(binding?.llUp!!, binding?.llDown!!, binding?.llDuplicate!!)
-
-            binding?.flOR?.alpha=1f
-
-            binding?.tvPopulationNumberDown?.visibility = View.GONE
-            binding?.tvPopulationDown?.visibility = View.GONE
-
-
-            binding?.tvNameDuplicate?.visibility = View.INVISIBLE
-            binding?.ivImageDuplicate?.visibility = View.INVISIBLE
-
-            binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.blue))
-            binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.blue))
-
-            binding?.ivImageUp?.isClickable = true
-            binding?.ivImageDown?.isClickable = true
-            binding?.ivImageUp?.isFocusable = true
-            binding?.ivImageDown?.isFocusable = true
+            if(!isDialogVisible)
+            {
+                nextTurn()
+            }
         }
 
+    }
+
+    //next turn animation and get next country to choose from
+    private suspend fun nextTurn()
+    {
+        //setting next country
+        //first new country is added to duplicated country elements only for animation purpose
+        val countryId = getRandomCountryId()
+        //Glide for load images from link to xml element
+        Glide.with(this@GameActivity).load(countryList?.get(countryId)?.flags?.png).into(binding!!.ivImageDuplicate)
+        binding?.tvNameDuplicate?.text = countryList?.get(countryId)?.name?.common
+
+        binding?.tvNameDuplicate?.visibility = View.VISIBLE
+        binding?.ivImageDuplicate?.visibility = View.VISIBLE
+
+        binding?.flOR?.alpha=0.3f
+        //animation with 3 displayed countries when one is fake only for animation
+        SlideAnimation.onStartAnimation(binding?.llUp!!, binding?.llDown!!, binding?.llDuplicate!!)
+
+        //waiting for animation to end
+        delay(Constants.NEXT_TURN_ANIM_DELAY)
+
+        //setting upper country to bottom country
+        setCountryData(countryDown!!, Constants.UP_COUNTRY)
+
+        //this is only for number format with ','
+        animatorUp.duration = 0L
+        animatorUp.start()
+
+        //setting bottom country to new country
+        setCountryData(countryList!![countryId], Constants.DOWN_COUNTRY)
+
+        //resetting position to starting
+        SlideAnimation.reset(binding?.llUp!!, binding?.llDown!!, binding?.llDuplicate!!)
+
+        binding?.flOR?.alpha=1f
+
+        //population in bottom country disappears because we want to not give player information about that
+        binding?.tvPopulationNumberDown?.visibility = View.GONE
+        binding?.tvPopulationDown?.visibility = View.GONE
+
+        //the supporting country disappears
+        binding?.tvNameDuplicate?.visibility = View.INVISIBLE
+        binding?.ivImageDuplicate?.visibility = View.INVISIBLE
+
+        //reset colors for text in countries
+        binding?.tvPopulationNumberDown?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.blue))
+        binding?.tvPopulationNumberUp?.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.blue))
+
+        //unblocking clicks on images
+        binding?.ivImageUp?.isClickable = true
+        binding?.ivImageDown?.isClickable = true
+        binding?.ivImageUp?.isFocusable = true
+        binding?.ivImageDown?.isFocusable = true
     }
 
     private fun animateNumberTextView(finalValue: Int, textview: TextView): ValueAnimator{
         val valueAnimator = ValueAnimator.ofInt(0, finalValue)
         //setting delay for animation
-        valueAnimator.duration = animationDelay
+        valueAnimator.duration = Constants.NUMBER_ANIM_DELAY
 
         //decimal format for separator between numbers
         val decimalFormat = DecimalFormat("###,###")
