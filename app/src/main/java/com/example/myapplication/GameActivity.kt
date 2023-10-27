@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.animation.ValueAnimator
+import android.app.ActivityOptions
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -28,6 +29,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+
 import kotlin.random.Random
 
 
@@ -74,7 +76,7 @@ class GameActivity : AppCompatActivity()
         isDataLoaded = intent.getIntExtra("loadData", 0)
 
         //we don't need load data from api again because we have it in file
-        if(isDataLoaded!=0 && Constants.isNetworkAvailable(this))
+        if(isDataLoaded!=0)
         {
             setupUI()
         }
@@ -212,18 +214,31 @@ class GameActivity : AppCompatActivity()
         val dialogBinding = CustomEndGameDialogBinding.inflate(layoutInflater)
         customEndDialog?.setContentView(dialogBinding.root)
 
-        dialogBinding.btnYes.setOnClickListener {
+        //setting text on end dialog with result score
+        if(score == 1) dialogBinding.tvResultScore.text = "You scored $score point"
+        else dialogBinding.tvResultScore.text = "You scored $score points"
+
+        dialogBinding.btnTryAgain.setOnClickListener {
+
             //start game activity again
             isDataLoaded++
+
+            //shared element transition
+            val options = ActivityOptions.makeSceneTransitionAnimation(this, binding?.flOR, "flOR")
+            //send variable to activity
             val intent = Intent(this, GameActivity::class.java)
             intent.putExtra("loadData", isDataLoaded)
-            startActivity(intent)
+
+            startActivity(intent, options.toBundle())
             finish()
         }
 
-        dialogBinding.btnNo.setOnClickListener {
+        dialogBinding.btnExit.setOnClickListener {
             customEndDialog?.dismiss()
+
             finish()
+            //fade animation for finish()
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
         customEndDialog?.setCancelable(false)
         customEndDialog?.show()
