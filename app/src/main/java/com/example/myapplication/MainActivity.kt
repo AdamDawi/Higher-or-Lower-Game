@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import com.example.myapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity()
@@ -16,7 +17,7 @@ class MainActivity : AppCompatActivity()
 
         var isDataLoaded = -1 //a variable to check if we need to load country data from the API
 
-        binding?.flStart?.setOnClickListener {
+        binding?.btnStart?.setOnClickListener {
             isDataLoaded++;
             val intent = Intent(this, GameActivity::class.java)
             //send variable to game activity

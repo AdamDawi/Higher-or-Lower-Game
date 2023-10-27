@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -223,14 +225,18 @@ class GameActivity : AppCompatActivity()
             //start game activity again
             isDataLoaded++
 
-            //shared element transition
-            val options = ActivityOptions.makeSceneTransitionAnimation(this, binding?.flOR, "flOR")
-            //send variable to activity
             val intent = Intent(this, GameActivity::class.java)
             intent.putExtra("loadData", isDataLoaded)
 
-            startActivity(intent, options.toBundle())
-            finish()
+            startActivity(intent)
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+            //make delay
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                finish()
+            }, 2000)
+
         }
 
         dialogBinding.btnExit.setOnClickListener {
