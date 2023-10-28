@@ -18,11 +18,18 @@ class MainActivity : AppCompatActivity()
         var isDataLoaded = -1 //a variable to check if we need to load country data from the API
 
         binding?.btnStart?.setOnClickListener {
+            //send variable to game activity
             isDataLoaded++;
             val intent = Intent(this, GameActivity::class.java)
-            //send variable to game activity
             intent.putExtra("loadData", isDataLoaded)
             startActivity(intent)
+            //fade animation
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+
+        binding?.btnLeaderboard?.setOnClickListener {
+            startActivity(Intent(this, LeaderboardActivity::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
     }
 

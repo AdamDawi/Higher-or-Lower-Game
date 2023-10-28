@@ -12,5 +12,5 @@
     <string name="exit">Exit</string>
     <string name="try_again">Try again</string>
     <string name="category">CATEGORY</string>
-    <string name="settings">SETTINGS</string>
+    <string name="leaderboard">LEADERBOARD</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.restAPI
 
 import java.io.Serializable
 

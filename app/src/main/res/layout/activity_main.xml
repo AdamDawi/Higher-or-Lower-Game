@@ -100,11 +100,24 @@
             android:layout_height="wrap_content"
             android:text="@string/start"
             android:textColor="@color/white"
-            android:textSize="50sp"
+            android:textSize="40sp"
             app:strokeColor="@color/blue"
             app:strokeWidth="6dp"
             android:layout_marginBottom="20dp"
-            android:padding="15dp"/>
+            android:padding="20dp"/>
+
+        <Button
+            android:id="@+id/btnLeaderboard"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/leaderboard"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            app:strokeColor="@color/blue"
+            app:strokeWidth="6dp"
+            android:layout_marginBottom="20dp"
+            android:padding="20dp"/>
 
         <Button
             android:id="@+id/btnCategory"
@@ -113,24 +126,11 @@
             android:layout_height="wrap_content"
             android:text="@string/category"
             android:textColor="@color/white"
-            android:textSize="50sp"
+            android:textSize="40sp"
             app:strokeColor="@color/blue"
             app:strokeWidth="6dp"
             android:layout_marginBottom="20dp"
-            android:padding="15dp"/>
-
-        <Button
-            android:id="@+id/btnSettings"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings"
-            android:textColor="@color/white"
-            android:textSize="50sp"
-            app:strokeColor="@color/blue"
-            app:strokeWidth="6dp"
-            android:layout_marginBottom="20dp"
-            android:padding="15dp"/>
+            android:padding="20dp"/>
 
     </LinearLayout>
 

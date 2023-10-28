@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.animation.ValueAnimator
-import android.app.ActivityOptions
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -18,6 +17,8 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.myapplication.databinding.ActivityGameBinding
 import com.example.myapplication.databinding.CustomEndGameDialogBinding
+import com.example.myapplication.restAPI.CountryModel
+import com.example.myapplication.restAPI.CountryService
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -105,7 +106,7 @@ class GameActivity : AppCompatActivity()
         }
         //making retrofit for fast connection with HTTP
         val retrofit: Retrofit = Retrofit.Builder().baseUrl(Constants.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build()
-        val service:CountryService = retrofit.create(CountryService::class.java)
+        val service: CountryService = retrofit.create(CountryService::class.java)
         val listCall: Call<List<CountryModel>> = service.getCountry()
 
         //invoking a request asynchronously
@@ -229,6 +230,7 @@ class GameActivity : AppCompatActivity()
             intent.putExtra("loadData", isDataLoaded)
 
             startActivity(intent)
+            //fade animation
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 
             //make delay

@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -53,4 +54,11 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+    //Room and Lifecycle dependencies
+    implementation("androidx.room:room-runtime:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+    //kotlin extensions for coroutine support with room
+    implementation("androidx.room:room-ktx:2.6.0")
+    //kotlin extensions for coroutine support with activities
+    implementation("androidx.activity:activity-ktx:1.8.0")
 }
