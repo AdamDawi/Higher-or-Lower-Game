@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "player-table")
 data class PlayerEntity(
+    //auto increment value
     @PrimaryKey(autoGenerate = true)
     val id: Int=0,
     val name: String="",

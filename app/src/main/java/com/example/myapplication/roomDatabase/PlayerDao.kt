@@ -7,21 +7,24 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
+//Data Access Object
+//for querying the database
 @Dao
 interface PlayerDao {
 
     @Insert
-    suspend fun insert(employeeEntity: PlayerEntity)
+    suspend fun insert(playerEntity: PlayerEntity)
 
     @Update
-    suspend fun update(employeeEntity: PlayerEntity)
+    suspend fun update(playerEntity: PlayerEntity)
 
     @Delete
-    suspend fun delete(employeeEntity: PlayerEntity)
+    suspend fun delete(playerEntity: PlayerEntity)
 
     @Query("Select * from `player-table`")
-    fun fetchAllEmployee(): Flow<List<PlayerEntity>>
+    //flow is used to hold values that can always change at runtime(live update)
+    fun fetchAllPlayers(): Flow<List<PlayerEntity>>
 
     @Query("Select * from `player-table` where id=:id")
-    fun fetchEmployeeById(id:Int): Flow<PlayerEntity>
+    fun fetchPlayerById(id:Int): Flow<PlayerEntity>
 }

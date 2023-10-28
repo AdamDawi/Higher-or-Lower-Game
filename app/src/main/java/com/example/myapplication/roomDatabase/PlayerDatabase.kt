@@ -7,31 +7,20 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [PlayerEntity::class],version = 2)
 abstract class PlayerDatabase: RoomDatabase() {
-    abstract fun playerDao(): PlayerDao
+    abstract fun playerDao(): PlayerDao //generated implementation automatically by roomDatabase
 
     companion object {
         @Volatile
         private var INSTANCE: PlayerDatabase? = null
-
         /**
          * Helper function to get the database.
-         *
          * If a database has already been retrieved, the previous database will be returned.
          * Otherwise, create a new database.
-         *
-         * This function is threadsafe, and callers should cache the result for multiple database
-         * calls to avoid overhead.
-         *
-         * This is an example of a simple Singleton pattern that takes another Singleton as an
-         * argument in Kotlin.
-         *
-         * To learn more about Singleton read the wikipedia article:
-         * https://en.wikipedia.org/wiki/Singleton_pattern
-         *
          * @param context The application context Singleton, used to get access to the filesystem.
          */
+        //initializes the database instance if it has not already been created
         fun getInstance(context: Context): PlayerDatabase {
-
+            //only one thread may enter a synchronized block at a time
             synchronized(this) {
 
                 var instance = INSTANCE
@@ -40,14 +29,11 @@ abstract class PlayerDatabase: RoomDatabase() {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         PlayerDatabase::class.java,
-                        "employee_database"
-                    )
-
-                        .fallbackToDestructiveMigration()
+                        "player_database"
+                    ).fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
                 }
-
                 return instance
             }
         }

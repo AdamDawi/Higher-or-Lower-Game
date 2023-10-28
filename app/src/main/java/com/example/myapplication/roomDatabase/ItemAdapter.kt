@@ -24,7 +24,7 @@ class ItemAdapter(
         val context = holder.itemView.context
         val item = items[position]
 
-        holder.tvRank.text = position.toString()
+        holder.tvRank.text = (position+1).toString()
         holder.tvPlayerName.text = item.name
         holder.tvPoints.text = item.points.toString()
     }

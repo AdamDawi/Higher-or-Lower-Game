@@ -102,7 +102,7 @@
             android:textColor="@color/white"
             android:textSize="40sp"
             app:strokeColor="@color/blue"
-            app:strokeWidth="6dp"
+            app:strokeWidth="4dp"
             android:layout_marginBottom="20dp"
             android:padding="20dp"/>
 
@@ -115,7 +115,7 @@
             android:textColor="@color/white"
             android:textSize="40sp"
             app:strokeColor="@color/blue"
-            app:strokeWidth="6dp"
+            app:strokeWidth="4dp"
             android:layout_marginBottom="20dp"
             android:padding="20dp"/>
 
@@ -128,7 +128,7 @@
             android:textColor="@color/white"
             android:textSize="40sp"
             app:strokeColor="@color/blue"
-            app:strokeWidth="6dp"
+            app:strokeWidth="4dp"
             android:layout_marginBottom="20dp"
             android:padding="20dp"/>
 

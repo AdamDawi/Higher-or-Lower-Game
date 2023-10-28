@@ -3,28 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/bgColor"
+    android:background="@drawable/recycler_view_item_bg"
     android:gravity="center"
     android:orientation="horizontal"
     android:padding="10dp">
 
     <TextView
         android:id="@+id/tvRank"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="1"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:textSize="25sp" />
+        android:textSize="18sp"
+        android:layout_weight="4"
+        android:gravity="left"/>
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        tools:text="."
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="25sp"
-        android:layout_weight="3"/>
 
     <TextView
         android:id="@+id/tvPlayerName"
@@ -33,17 +27,19 @@
         tools:text="Player name"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:textSize="25sp"
-        android:layout_weight="10"/>
+        android:textSize="18sp"
+        android:layout_weight="10"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/tvPoints"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="100"
         android:textColor="@color/white"
         android:textStyle="bold"
-        android:textSize="25sp"
-        android:layout_weight="1"/>
+        android:textSize="18sp"
+        android:layout_weight="4"
+        android:gravity="center"/>
 
 </LinearLayout>
