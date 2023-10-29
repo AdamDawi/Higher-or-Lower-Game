@@ -1,12 +1,9 @@
 package com.example.myapplication
 
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import com.example.myapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity()
@@ -25,7 +22,7 @@ class MainActivity : AppCompatActivity()
             if(name.isNotBlank())
             {
                 //increment because we need to check if this is first time in main activity or not
-                isDataLoaded++;
+                isDataLoaded++
                 val intent = Intent(this, GameActivity::class.java)
                 //send variables to game activity
                 intent.putExtra("loadData", isDataLoaded)
@@ -45,6 +42,7 @@ class MainActivity : AppCompatActivity()
         binding?.btnLeaderboard?.setOnClickListener {
             startActivity(Intent(this, LeaderboardActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            binding?.etName?.clearFocus()
         }
     }
 

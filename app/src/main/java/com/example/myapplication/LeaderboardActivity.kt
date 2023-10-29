@@ -2,9 +2,7 @@ package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.ActivityLeaderboardBinding
@@ -25,12 +23,12 @@ class LeaderboardActivity : AppCompatActivity() {
             //getting sorted player list from database to leaderboard
             playerDao.getPlayersSortedByPointsDescending().collect {
                 val list = ArrayList(it)
-                setupListOfDataIntoRecyclerView(list, playerDao)
+                setupListOfDataIntoRecyclerView(list)
             }
         }
     }
 
-    private fun setupListOfDataIntoRecyclerView(playerList: ArrayList<PlayerEntity>, playerDao: PlayerDao) {
+    private fun setupListOfDataIntoRecyclerView(playerList: ArrayList<PlayerEntity>) {
         if (playerList.isNotEmpty()) {
             // Adapter class is initialized and list is passed in the param.
             val itemAdapter = ItemAdapter(playerList)

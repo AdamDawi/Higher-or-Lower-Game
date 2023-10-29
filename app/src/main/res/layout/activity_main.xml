@@ -86,65 +86,50 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl2"
+        android:layout_marginTop="25dp"
         android:orientation="vertical"
         android:padding="5dp"
-        android:layout_marginTop="25dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl2">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:hint="@string/name"
-            android:textColorHint="#a8a8a8"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/circle_button_shape"
-            android:layout_marginBottom="20dp" />
+            android:hint="@string/name"
+            android:padding="20dp"
+            android:textColor="@color/white"
+            android:textColorHint="#a8a8a8"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btnStart"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:padding="20dp"
             android:text="@string/start"
             android:textColor="@color/white"
             android:textSize="40sp"
             app:strokeColor="@color/blue"
-            app:strokeWidth="4dp"
-            android:layout_marginBottom="20dp"
-            android:padding="20dp"/>
+            app:strokeWidth="4dp" />
 
         <Button
             android:id="@+id/btnLeaderboard"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:padding="20dp"
             android:text="@string/leaderboard"
             android:textColor="@color/white"
             android:textSize="40sp"
             app:strokeColor="@color/blue"
-            app:strokeWidth="4dp"
-            android:layout_marginBottom="20dp"
-            android:padding="20dp"/>
-
-        <Button
-            android:id="@+id/btnCategory"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/category"
-            android:textColor="@color/white"
-            android:textSize="40sp"
-            app:strokeColor="@color/blue"
-            app:strokeWidth="4dp"
-            android:layout_marginBottom="20dp"
-            android:padding="20dp"/>
-
+            app:strokeWidth="4dp" />
     </LinearLayout>
 
 

@@ -64,7 +64,7 @@ class GameActivity : AppCompatActivity()
     private lateinit var mSharedPreferences: SharedPreferences
     //if we need country data from the API, we set it to 0, if not, we don't need it
     private var isDataLoaded: Int = 0
-    private var playerName: String? = null
+    private lateinit var playerName: String
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -82,7 +82,7 @@ class GameActivity : AppCompatActivity()
 
         //getting value from main activity
         isDataLoaded = intent.getIntExtra("loadData", 0)
-        playerName = intent.getStringExtra("name")
+        playerName = intent.getStringExtra("name")?:""
 
         //we don't need load data from api again because we have it in file
         if(isDataLoaded!=0)
@@ -144,6 +144,8 @@ class GameActivity : AppCompatActivity()
                         setCountryData(countryList!![getRandomCountryId()], Constants.UP_COUNTRY)
                         setCountryData(countryList!![getRandomCountryId()], Constants.DOWN_COUNTRY)
 
+                        //freeze thread for 0.5sec because of loading images
+                        Thread.sleep(500)
                         cancelProgressDialog()
                     }
                 }
@@ -247,7 +249,7 @@ class GameActivity : AppCompatActivity()
             handler.postDelayed({
                 finish()
             }, 2000)
-
+            customEndDialog?.dismiss()
         }
 
         dialogBinding.btnExit.setOnClickListener {
@@ -256,6 +258,7 @@ class GameActivity : AppCompatActivity()
             finish()
             //fade animation for finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            customEndDialog?.dismiss()
         }
         customEndDialog?.setCancelable(false)
         customEndDialog?.show()
@@ -437,15 +440,18 @@ class GameActivity : AppCompatActivity()
     private fun addRecordToDatabase(playerDao: PlayerDao) {
         val name = playerName
         val points = score
-        if (points!=0 && !name.isNullOrEmpty()) {
+        if (points!=0 && name.isNotEmpty()) {
             //coroutine
             lifecycleScope.launch {
                 //skip id because it is autoincrement
-                playerDao.insert(PlayerEntity(name = name!!, points = points))
+                playerDao.insert(PlayerEntity(name = name, points = points))
                 Toast.makeText(applicationContext, "Result saved", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            Toast.makeText(applicationContext, "U don't have enough points to leaderboard", Toast.LENGTH_SHORT).show()
+        } else if(points==0){
+            Toast.makeText(applicationContext, "You don't have enough points to reach leaderboard", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            Toast.makeText(applicationContext, "Something went wrong with saving", Toast.LENGTH_SHORT).show()
         }
     }
 
