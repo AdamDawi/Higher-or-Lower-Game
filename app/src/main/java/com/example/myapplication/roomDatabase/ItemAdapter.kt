@@ -6,9 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ItemsRowBinding
 
 class ItemAdapter(
-    private val items: ArrayList<PlayerEntity>,
-    private val updateListener: (id: Int) -> Unit,
-    private val deleteListener: (id: Int) -> Unit
+    private val items: ArrayList<PlayerEntity>
 ): RecyclerView.Adapter<ItemAdapter.ViewHolder>()
 {
 

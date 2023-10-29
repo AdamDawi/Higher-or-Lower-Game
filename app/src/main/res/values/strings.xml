@@ -13,4 +13,5 @@
     <string name="try_again">Try again</string>
     <string name="category">CATEGORY</string>
     <string name="leaderboard">LEADERBOARD</string>
+    <string name="name">name</string>
 </resources>

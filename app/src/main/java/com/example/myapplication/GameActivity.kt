@@ -14,11 +14,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.myapplication.databinding.ActivityGameBinding
 import com.example.myapplication.databinding.CustomEndGameDialogBinding
 import com.example.myapplication.restAPI.CountryModel
 import com.example.myapplication.restAPI.CountryService
+import com.example.myapplication.roomDatabase.PlayerApp
+import com.example.myapplication.roomDatabase.PlayerDao
+import com.example.myapplication.roomDatabase.PlayerEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -60,6 +64,7 @@ class GameActivity : AppCompatActivity()
     private lateinit var mSharedPreferences: SharedPreferences
     //if we need country data from the API, we set it to 0, if not, we don't need it
     private var isDataLoaded: Int = 0
+    private var playerName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -77,6 +82,7 @@ class GameActivity : AppCompatActivity()
 
         //getting value from main activity
         isDataLoaded = intent.getIntExtra("loadData", 0)
+        playerName = intent.getStringExtra("name") as String
 
         //we don't need load data from api again because we have it in file
         if(isDataLoaded!=0)
@@ -220,6 +226,9 @@ class GameActivity : AppCompatActivity()
         //setting text on end dialog with result score
         if(score == 1) dialogBinding.tvResultScore.text = "You scored $score point"
         else dialogBinding.tvResultScore.text = "You scored $score points"
+
+        val playerDao = (application as PlayerApp).database.playerDao()
+        addRecordToDatabase(playerDao)
 
         dialogBinding.btnTryAgain.setOnClickListener {
 
@@ -423,6 +432,21 @@ class GameActivity : AppCompatActivity()
             textview.text = formattedValue
         }
         return valueAnimator
+    }
+
+    private fun addRecordToDatabase(playerDao: PlayerDao) {
+        val name = playerName
+        val points = score
+        if (points!=0) {
+            //coroutine
+            lifecycleScope.launch {
+                //skip id because it is autoincrement
+                playerDao.insert(PlayerEntity(name = name, points = points))
+                Toast.makeText(applicationContext, "Result saved", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(applicationContext, "U don't have enough points to leaderboard", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroy()

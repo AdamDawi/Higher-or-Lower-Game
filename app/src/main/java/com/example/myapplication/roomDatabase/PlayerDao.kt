@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 //for querying the database
 @Dao
 interface PlayerDao {
-
+    //CRUD operations: create, read, update, delete
     @Insert
     suspend fun insert(playerEntity: PlayerEntity)
 
@@ -27,4 +27,7 @@ interface PlayerDao {
 
     @Query("Select * from `player-table` where id=:id")
     fun fetchPlayerById(id:Int): Flow<PlayerEntity>
+
+    @Query("SELECT * FROM `player-table` ORDER BY points DESC")
+    fun getPlayersSortedByPointsDescending(): Flow<List<PlayerEntity>>
 }

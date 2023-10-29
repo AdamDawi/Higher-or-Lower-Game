@@ -6,7 +6,8 @@
     android:background="@drawable/recycler_view_item_bg"
     android:gravity="center"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:id="@+id/llMain">
 
     <TextView
         android:id="@+id/tvRank"

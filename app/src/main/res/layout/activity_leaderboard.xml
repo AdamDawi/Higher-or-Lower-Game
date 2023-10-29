@@ -8,7 +8,8 @@
     android:background="@color/bgColor"
     android:paddingLeft="25dp"
     android:paddingRight="25dp"
-    android:paddingTop="25dp">
+    android:paddingTop="25dp"
+    android:id="@+id/llMain">
 
     <TextView
         android:id="@+id/tvLeaderboard"
@@ -73,5 +74,18 @@
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         tools:layout_editor_absoluteX="15dp" />
+
+    <TextView
+        android:id="@+id/tvNoplayers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No players to display"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
