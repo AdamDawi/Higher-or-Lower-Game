@@ -14,4 +14,5 @@
     <string name="category">CATEGORY</string>
     <string name="leaderboard">LEADERBOARD</string>
     <string name="name">name</string>
+    <string name="no_players_to_display">No players to display</string>
 </resources>

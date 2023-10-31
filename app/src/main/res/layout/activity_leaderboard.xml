@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +9,8 @@
     android:paddingLeft="25dp"
     android:paddingRight="25dp"
     android:paddingTop="25dp"
-    android:id="@+id/llMain">
+    android:id="@+id/llMain"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tvLeaderboard"
@@ -19,21 +20,15 @@
         android:textColor="@color/white"
         android:textSize="40sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLeaderboard"
         android:orientation="horizontal"
         android:gravity="center"
-        android:padding="10dp"
-        >
+        android:padding="10dp">
 
         <TextView
             android:layout_width="0dp"
@@ -67,19 +62,20 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvLeaderboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        tools:layout_editor_absoluteX="15dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLeaderboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
+            android:visibility="visible" />
+
+
 
     <TextView
         android:id="@+id/tvNoplayers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No players to display"
+        android:text="@string/no_players_to_display"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -88,4 +84,4 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         android:visibility="gone"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

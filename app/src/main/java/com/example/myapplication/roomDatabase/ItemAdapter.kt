@@ -19,7 +19,6 @@ class ItemAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val context = holder.itemView.context
         val item = items[position]
 
         holder.tvRank.text = (position+1).toString()

@@ -64,7 +64,7 @@ class GameActivity : AppCompatActivity()
     private lateinit var mSharedPreferences: SharedPreferences
     //if we need country data from the API, we set it to 0, if not, we don't need it
     private var isDataLoaded: Int = 0
-    private lateinit var playerName: String
+    private var playerName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -82,7 +82,8 @@ class GameActivity : AppCompatActivity()
 
         //getting value from main activity
         isDataLoaded = intent.getIntExtra("loadData", 0)
-        playerName = intent.getStringExtra("name")?:""
+        playerName = intent.getStringExtra("name")
+        Log.e("Received Name", playerName?:"jest nullem")
 
         //we don't need load data from api again because we have it in file
         if(isDataLoaded!=0)
@@ -438,16 +439,16 @@ class GameActivity : AppCompatActivity()
     }
 
     private fun addRecordToDatabase(playerDao: PlayerDao) {
-        val name = playerName
-        val points = score
-        if (points!=0 && name.isNotEmpty()) {
+
+        if (score!=0 && !playerName.isNullOrBlank()) {
             //coroutine
+            Log.e("IMIEEE ", playerName!!)
             lifecycleScope.launch {
                 //skip id because it is autoincrement
-                playerDao.insert(PlayerEntity(name = name, points = points))
+                playerDao.insert(PlayerEntity(name = playerName!!, points = score))
                 Toast.makeText(applicationContext, "Result saved", Toast.LENGTH_SHORT).show()
             }
-        } else if(points==0){
+        } else if(score==0){
             Toast.makeText(applicationContext, "You don't have enough points to reach leaderboard", Toast.LENGTH_SHORT).show()
         }
         else{

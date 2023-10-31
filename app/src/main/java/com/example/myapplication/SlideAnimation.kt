@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.content.res.Resources
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 
@@ -11,8 +12,16 @@ object SlideAnimation
     {
 
         val locationUp = IntArray(2)
+        //getting location of country Up
         llUp.getLocationOnScreen(locationUp)
-        val countryDownAnimator = ValueAnimator.ofFloat(0f, -locationUp[1].toFloat()-llDown.height.toFloat()-80f)
+
+        //getting screen metrics
+        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+        val percentOfScreen = 0.03 // 3%
+        val translationY = percentOfScreen * screenHeight
+
+
+        val countryDownAnimator = ValueAnimator.ofFloat(0f, -locationUp[1].toFloat()-llDown.height.toFloat()-translationY.toFloat())
 
         countryDownAnimator.addUpdateListener {
             val value = it.animatedValue as Float

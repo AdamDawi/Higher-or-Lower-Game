@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,10 +33,15 @@ class LeaderboardActivity : AppCompatActivity() {
         if (playerList.isNotEmpty()) {
             // Adapter class is initialized and list is passed in the param.
             val itemAdapter = ItemAdapter(playerList)
-            // Set the LayoutManager that this RecyclerView will use.
-            binding?.rvLeaderboard?.layoutManager = LinearLayoutManager(this)
             // adapter instance is set to the recyclerview to inflate the items.
             binding?.rvLeaderboard?.adapter = itemAdapter
+            // Set the LayoutManager that this RecyclerView will use.
+            val layoutManager = LinearLayoutManager(this)
+            layoutManager.orientation = LinearLayoutManager.VERTICAL
+            binding?.rvLeaderboard?.layoutManager = layoutManager
+
+            Log.e("Rozmiarrr ", playerList.size.toString())
+
             binding?.rvLeaderboard?.visibility = View.VISIBLE
         } else {
             binding?.tvNoplayers?.visibility = View.VISIBLE
