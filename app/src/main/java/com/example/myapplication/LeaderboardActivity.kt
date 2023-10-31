@@ -39,9 +39,6 @@ class LeaderboardActivity : AppCompatActivity() {
             val layoutManager = LinearLayoutManager(this)
             layoutManager.orientation = LinearLayoutManager.VERTICAL
             binding?.rvLeaderboard?.layoutManager = layoutManager
-
-            Log.e("Rozmiarrr ", playerList.size.toString())
-
             binding?.rvLeaderboard?.visibility = View.VISIBLE
         } else {
             binding?.tvNoplayers?.visibility = View.VISIBLE

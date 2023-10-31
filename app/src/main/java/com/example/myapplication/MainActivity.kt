@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity()
 
         binding?.btnStart?.setOnClickListener {
             val name = binding?.etName?.text.toString()
-            if(name.isNotBlank())
+            if(!name.isNullOrBlank())
             {
                 //increment because we need to check if this is first time in main activity or not
                 isDataLoaded++

@@ -29,6 +29,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,6 +37,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.util.concurrent.TimeUnit
 
 import kotlin.random.Random
 
@@ -111,8 +113,13 @@ class GameActivity : AppCompatActivity()
         {
             Toast.makeText(this@GameActivity, "You don't have internet connection.", Toast.LENGTH_SHORT).show()
         }
+        //set httpClient with waiting time and read time
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
         //making retrofit for fast connection with HTTP
-        val retrofit: Retrofit = Retrofit.Builder().baseUrl(Constants.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build()
+        val retrofit: Retrofit = Retrofit.Builder().baseUrl(Constants.BASE_URL).client(okHttpClient).addConverterFactory(GsonConverterFactory.create()).build()
         val service: CountryService = retrofit.create(CountryService::class.java)
         val listCall: Call<List<CountryModel>> = service.getCountry()
 
@@ -162,6 +169,7 @@ class GameActivity : AppCompatActivity()
             }
             override fun onFailure(call: Call<List<CountryModel>>, t: Throwable) {
                 Log.e("ERROR", t.message.toString())
+                Toast.makeText(this@GameActivity, t.message.toString(), Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -240,6 +248,7 @@ class GameActivity : AppCompatActivity()
 
             val intent = Intent(this, GameActivity::class.java)
             intent.putExtra("loadData", isDataLoaded)
+            intent.putExtra("name", playerName)
 
             startActivity(intent)
             //fade animation
@@ -442,7 +451,6 @@ class GameActivity : AppCompatActivity()
 
         if (score!=0 && !playerName.isNullOrBlank()) {
             //coroutine
-            Log.e("IMIEEE ", playerName!!)
             lifecycleScope.launch {
                 //skip id because it is autoincrement
                 playerDao.insert(PlayerEntity(name = playerName!!, points = score))
