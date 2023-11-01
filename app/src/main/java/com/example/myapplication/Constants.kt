@@ -14,6 +14,7 @@ object Constants{
     */
     const val UP_COUNTRY:Int = 0
     const val DOWN_COUNTRY:Int = 1
+    //names of variables that are saved and loaded for subsequent activities
     const val PREFERENCE_NAME = "CountryAppPreference"
     const val COUNTRY_RESPONSE_DATA = "country_response_data"
     //this is delay for changing countries in next turn while player choose before

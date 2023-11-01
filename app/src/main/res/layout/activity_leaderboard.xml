@@ -16,7 +16,7 @@
         android:id="@+id/tvLeaderboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LEADERBOARD"
+        android:text="@string/leaderboard"
         android:textColor="@color/white"
         android:textSize="40sp"
         android:textStyle="bold"
@@ -33,7 +33,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="RANK"
+            android:text="@string/rank"
             android:textColor="@color/orange"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -43,7 +43,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="NAME"
+            android:text="@string/name_L"
             android:textColor="@color/orange"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="POINTS"
+            android:text="@string/points"
             android:textColor="@color/orange"
             android:textStyle="bold"
             android:textSize="18sp"

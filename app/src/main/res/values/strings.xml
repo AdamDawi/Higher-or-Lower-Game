@@ -15,4 +15,7 @@
     <string name="leaderboard">LEADERBOARD</string>
     <string name="name">name</string>
     <string name="no_players_to_display">No players to display</string>
+    <string name="rank">RANK</string>
+    <string name="name_L">NAME</string>
+    <string name="points">POINTS</string>
 </resources>

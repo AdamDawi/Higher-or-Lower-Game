@@ -41,8 +41,8 @@ class LeaderboardActivity : AppCompatActivity() {
             binding?.rvLeaderboard?.layoutManager = layoutManager
             binding?.rvLeaderboard?.visibility = View.VISIBLE
         } else {
-            binding?.tvNoplayers?.visibility = View.VISIBLE
             binding?.rvLeaderboard?.visibility = View.GONE
+            binding?.tvNoplayers?.visibility = View.VISIBLE
         }
     }
 
