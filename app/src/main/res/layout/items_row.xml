@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/recycler_view_item_bg"
+    android:background="@drawable/recycler_view_item_bg_v2"
     android:gravity="center"
     android:orientation="horizontal"
     android:padding="10dp"

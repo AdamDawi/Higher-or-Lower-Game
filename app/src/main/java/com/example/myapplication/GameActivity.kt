@@ -85,7 +85,6 @@ class GameActivity : AppCompatActivity()
         //getting value from main activity
         isDataLoaded = intent.getIntExtra("loadData", 0)
         playerName = intent.getStringExtra("name")
-        Log.e("Received Name", playerName?:"jest nullem")
 
         //we don't need load data from api again because we have it in file
         if(isDataLoaded!=0)
@@ -169,7 +168,7 @@ class GameActivity : AppCompatActivity()
             }
             override fun onFailure(call: Call<List<CountryModel>>, t: Throwable) {
                 Log.e("ERROR", t.message.toString())
-                Toast.makeText(this@GameActivity, t.message.toString(), Toast.LENGTH_LONG).show()
+                Toast.makeText(this@GameActivity, "Error connecting to the server. Please try again later.", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -457,7 +456,7 @@ class GameActivity : AppCompatActivity()
                 Toast.makeText(applicationContext, "Result saved", Toast.LENGTH_SHORT).show()
             }
         } else if(score==0){
-            Toast.makeText(applicationContext, "You don't have enough points to reach leaderboard", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(applicationContext, "You don't have enough points to reach leaderboard", Toast.LENGTH_SHORT).show()
         }
         else{
             Toast.makeText(applicationContext, "Something went wrong with saving", Toast.LENGTH_SHORT).show()
