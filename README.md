@@ -25,7 +25,8 @@ The application is built using the following technologies:
 
 ### Here are some pictures of the mobile application:
 
-![menu2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/25ac2a5b-bd00-457a-9ef4-bad59f3a86ce)
-![game2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/44c22c9b-0d91-427d-a204-7b73b980f165)
-![result2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/14798e8e-08af-44e7-95a4-4dc4c747d139)
-![leaderboard2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/9cf6f86d-5686-4cdd-b296-dc407d78a067)
+![menu2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/fa2bedca-4660-4da6-89d9-0ec6877480ec)
+![game2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/320f673d-3074-4fc8-a0e4-7c446f725d5f)
+
+![result2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/e02dffc6-3c16-4172-817a-0072679ba665)
+![leaderboard2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/8a76ca5d-1a13-4fd2-8edf-2aa7d9fb556b)
