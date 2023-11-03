@@ -23,7 +23,7 @@ The application is built using the following technologies:
 - gson(converts json to other formats)
 - glide(loading images from the Internet)
 
-### Here are some pictures of the mobile application:
+### Here are some pictures of the application:
 
 ![menu2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/fa2bedca-4660-4da6-89d9-0ec6877480ec)
 ![game2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/320f673d-3074-4fc8-a0e4-7c446f725d5f)
