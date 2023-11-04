@@ -1,17 +1,17 @@
 # Higher-or-Lower-Game
-Higher or lower is a game of guessing which of two selected countries has the larger population. Your goal is to achieve the highest score possible by hitting the right answers.
+Higher or lower is a game of guessing which one of two selected countries has the larger population. Your goal is to achieve the highest score possible by choosing the right answers.
 
 ### Getting Started
-To start the game for the first time when application opens, you need an internet connection, otherwise the application will not connect to the API. The next games do not require the Internet because API data is saved in the cache.
-After game ends a result greater than zero, it is automatically saved to the leaderboard.
+To start the game for the first time, when application opens, you need an internet connection. Otherwise the application will not connect to the API. The next games do not require the Internet because API data is saved in the cache.
+After the game ends with a result higher than zero, it is automatically saved to the leaderboard.
 
 ### How to play
 1. You select two options from the list of available countries.
-2. You choose which of these countries has the larger population.
+2. You choose which one of this countries has the larger population.
 4. The game shows whether you answered correctly.
-5. If your answer was correct, the countries move up one.
+5. If your answer was correct, the countries move one place up.
 6. After each round, there will be one new country to choose from.
-7. The game continues until you run out of available countries or you lose.
+7. The game continues until you run out of available countries or you loose.
 
 ### Technologies Used
 The application is built using the following technologies:
