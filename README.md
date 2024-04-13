@@ -1,4 +1,4 @@
-# Higher-or-Lower-Game
+# <img src="https://github.com/AdamDawi/Real-chat-room/assets/49430055/edb8c16b-2d11-4f68-89fe-71cbe5c47182" width="60" height="60" align="center" /> Higher-or-Lower-Game
 Higher or lower is a game of guessing which one of two selected countries has the larger population. Your goal is to achieve the highest score possible by choosing the right answers.
 
 ### Getting Started
