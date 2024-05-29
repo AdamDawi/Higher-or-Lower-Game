@@ -30,3 +30,6 @@ The application is built using the following technologies:
 
 ![result2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/e02dffc6-3c16-4172-817a-0072679ba665)
 ![leaderboard2](https://github.com/AdamDawi/Higher-or-Lower-Game/assets/49430055/8a76ca5d-1a13-4fd2-8edf-2aa7d9fb556b)
+
+## Game:
+!["Game"](gifs/game.gif)
